@@ -1,37 +1,36 @@
-
 #include <ctime>
 #include <iostream>
 
 using namespace std;
 
-bool isKabisat(int tahun) {
-  return (tahun % 4 == 0 && tahun % 100 != 0) || (tahun % 400 == 0);
+bool isKabisat(int thn) {
+  return (thn % 4 == 0 && thn % 100 != 0) || (thn % 400 == 0);
 }
 
-void tambahHari(int &hari, int &bulan, int &tahun, int hariDitambahkan) {
+void tambahHari(int &hari, int &bln, int &thn, int yangDitambahkan) {
   const int jumlahHariPerBulan[] = {
-      0, 31, 28 + isKabisat(tahun), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+      0, 31, 28 + isKabisat(thn), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-  while (hariDitambahkan > 0) {
-    int hariDalamBulanIni = jumlahHariPerBulan[bulan] - hari + 1;
+  while (yangDitambahkan > 0) {
+    int hariDalamBulanIni = jumlahHariPerBulan[bln] - hari + 1;
 
-    if (hariDitambahkan >= hariDalamBulanIni) {
-      hariDitambahkan -= hariDalamBulanIni;
+    if (yangDitambahkan >= hariDalamBulanIni) {
+      yangDitambahkan -= hariDalamBulanIni;
       hari = 1;
-      bulan++;
-      if (bulan > 12) {
-        bulan = 1;
-        tahun++;
+      bln++;
+      if (bln > 12) {
+        bln = 1;
+        thn++;
       }
     } else {
-      hari += hariDitambahkan;
-      hariDitambahkan = 0;
+      hari += yangDitambahkan;
+      yangDitambahkan = 0;
     }
   }
 }
-
 int main() {
-  int hari, bulan, tahun, hariDitambahkan;
+  int hari, bulan, thn, hariDitambahkan;
+  char pertanyaan;
 
   cout << "Masukkan tanggal (1-31): ";
   cin >> hari;
@@ -40,20 +39,23 @@ int main() {
   cin >> bulan;
 
   cout << "Masukkan tahun (contoh: 2023): ";
-  cin >> tahun;
+  cin >> thn;
 
-  cout << "Masukkan jumlah hari yang akan ditambahkan: ";
-  cin >> hariDitambahkan;
+  cout << "Apakah ingin menambahkan hari? (y/n): ";
+  cin >> pertanyaan;
 
-  if (hari < 1 || hari > 31 || bulan < 1 || bulan > 12 || tahun < 0) {
+  if (pertanyaan == 'y') {
+    cout << "Masukkan jumlah hari yang ingin ditambahkan: ";
+    cin >> hariDitambahkan;
+    tambahHari(hari, bulan, thn, hariDitambahkan);
+    cout << "Jumlah hari yang anda tambahkan adalah " << hariDitambahkan
+         << ", jadi hasilnya adalah " << hari << "/" << bulan << "/" << thn
+         << endl;
+  } else if (pertanyaan == 'n') {
+    cout << "Tanggal yang anda masukkan adalah " << hari << "/" << bulan << "/"
+         << thn << endl;
+  } else if (hari && bulan && thn < 0 || bulan <= 1 || bulan >= 12) {
     cout << "Tanggal, bulan, atau tahun tidak valid." << endl;
-    return 1;
   }
-
-  tambahHari(hari, bulan, tahun, hariDitambahkan);
-
-  cout << "Tanggal setelah penambahan " << hariDitambahkan << " hari: " << hari
-       << "/" << bulan << "/" << tahun << endl;
-
   return 0;
 }
